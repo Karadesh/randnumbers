@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.12.4
-// source: base.proto
+// source: api/proto/base.proto
 
 package randomNumbers
 
@@ -216,5 +216,5 @@ var RandomNumbers_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "base.proto",
+	Metadata: "api/proto/base.proto",
 }
