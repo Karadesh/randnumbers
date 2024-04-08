@@ -148,6 +148,8 @@ func generateWithParams(strObject string) (string, string) {
 				intSlice = append(intSlice, intValue%numberInt)
 			}
 		}
+	}else{
+		return "Params are unavailable", ""
 	}
 	for _, value := range intSlice {
 		answer = append(answer, strconv.Itoa(value))
