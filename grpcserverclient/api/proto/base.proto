@@ -5,10 +5,7 @@ option go_package = "./randomNumbers";
 package api;
 
 service RandomNumbers {
-  rpc Generate(GenRequest) returns (GenResponse) {}
-  rpc GenerateCrypto(CryptRequest) returns (CryptResponse) {}
-  rpc GenerateNumbers(GenNumRequest) returns (GenNumResponse) {}
-  rpc SendNumbers (SendNumRequest) returns (SendNumResponse) {}
+  rpc GenerateRequest(GenRequest) returns (GenResponse) {}
 }
 
 message GenRequest {
@@ -17,29 +14,4 @@ message GenRequest {
 
 message GenResponse {
   string result = 1;
-}
-
-message CryptRequest {
-  string request = 1;
-}
-
-message CryptResponse {
-  string result = 1;
-}
-
-message GenNumRequest {
-  string userCommand = 1;
-  string userNumbers = 2;
-}
-
-message GenNumResponse  {
-  string result = 1;
-}
-
-message SendNumRequest {
-  string request = 1;
-}
-
-message SendNumResponse {
-  string response = 1;
 }

@@ -19,20 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	RandomNumbers_Generate_FullMethodName        = "/api.RandomNumbers/Generate"
-	RandomNumbers_GenerateCrypto_FullMethodName  = "/api.RandomNumbers/GenerateCrypto"
-	RandomNumbers_GenerateNumbers_FullMethodName = "/api.RandomNumbers/GenerateNumbers"
-	RandomNumbers_SendNumbers_FullMethodName     = "/api.RandomNumbers/SendNumbers"
+	RandomNumbers_GenerateRequest_FullMethodName = "/api.RandomNumbers/GenerateRequest"
 )
 
 // RandomNumbersClient is the client API for RandomNumbers service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RandomNumbersClient interface {
-	Generate(ctx context.Context, in *GenRequest, opts ...grpc.CallOption) (*GenResponse, error)
-	GenerateCrypto(ctx context.Context, in *CryptRequest, opts ...grpc.CallOption) (*CryptResponse, error)
-	GenerateNumbers(ctx context.Context, in *GenNumRequest, opts ...grpc.CallOption) (*GenNumResponse, error)
-	SendNumbers(ctx context.Context, in *SendNumRequest, opts ...grpc.CallOption) (*SendNumResponse, error)
+	GenerateRequest(ctx context.Context, in *GenRequest, opts ...grpc.CallOption) (*GenResponse, error)
 }
 
 type randomNumbersClient struct {
@@ -43,36 +37,9 @@ func NewRandomNumbersClient(cc grpc.ClientConnInterface) RandomNumbersClient {
 	return &randomNumbersClient{cc}
 }
 
-func (c *randomNumbersClient) Generate(ctx context.Context, in *GenRequest, opts ...grpc.CallOption) (*GenResponse, error) {
+func (c *randomNumbersClient) GenerateRequest(ctx context.Context, in *GenRequest, opts ...grpc.CallOption) (*GenResponse, error) {
 	out := new(GenResponse)
-	err := c.cc.Invoke(ctx, RandomNumbers_Generate_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *randomNumbersClient) GenerateCrypto(ctx context.Context, in *CryptRequest, opts ...grpc.CallOption) (*CryptResponse, error) {
-	out := new(CryptResponse)
-	err := c.cc.Invoke(ctx, RandomNumbers_GenerateCrypto_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *randomNumbersClient) GenerateNumbers(ctx context.Context, in *GenNumRequest, opts ...grpc.CallOption) (*GenNumResponse, error) {
-	out := new(GenNumResponse)
-	err := c.cc.Invoke(ctx, RandomNumbers_GenerateNumbers_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *randomNumbersClient) SendNumbers(ctx context.Context, in *SendNumRequest, opts ...grpc.CallOption) (*SendNumResponse, error) {
-	out := new(SendNumResponse)
-	err := c.cc.Invoke(ctx, RandomNumbers_SendNumbers_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, RandomNumbers_GenerateRequest_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,10 +50,7 @@ func (c *randomNumbersClient) SendNumbers(ctx context.Context, in *SendNumReques
 // All implementations must embed UnimplementedRandomNumbersServer
 // for forward compatibility
 type RandomNumbersServer interface {
-	Generate(context.Context, *GenRequest) (*GenResponse, error)
-	GenerateCrypto(context.Context, *CryptRequest) (*CryptResponse, error)
-	GenerateNumbers(context.Context, *GenNumRequest) (*GenNumResponse, error)
-	SendNumbers(context.Context, *SendNumRequest) (*SendNumResponse, error)
+	GenerateRequest(context.Context, *GenRequest) (*GenResponse, error)
 	mustEmbedUnimplementedRandomNumbersServer()
 }
 
@@ -94,17 +58,8 @@ type RandomNumbersServer interface {
 type UnimplementedRandomNumbersServer struct {
 }
 
-func (UnimplementedRandomNumbersServer) Generate(context.Context, *GenRequest) (*GenResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Generate not implemented")
-}
-func (UnimplementedRandomNumbersServer) GenerateCrypto(context.Context, *CryptRequest) (*CryptResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GenerateCrypto not implemented")
-}
-func (UnimplementedRandomNumbersServer) GenerateNumbers(context.Context, *GenNumRequest) (*GenNumResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GenerateNumbers not implemented")
-}
-func (UnimplementedRandomNumbersServer) SendNumbers(context.Context, *SendNumRequest) (*SendNumResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendNumbers not implemented")
+func (UnimplementedRandomNumbersServer) GenerateRequest(context.Context, *GenRequest) (*GenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateRequest not implemented")
 }
 func (UnimplementedRandomNumbersServer) mustEmbedUnimplementedRandomNumbersServer() {}
 
@@ -119,74 +74,20 @@ func RegisterRandomNumbersServer(s grpc.ServiceRegistrar, srv RandomNumbersServe
 	s.RegisterService(&RandomNumbers_ServiceDesc, srv)
 }
 
-func _RandomNumbers_Generate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _RandomNumbers_GenerateRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GenRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RandomNumbersServer).Generate(ctx, in)
+		return srv.(RandomNumbersServer).GenerateRequest(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: RandomNumbers_Generate_FullMethodName,
+		FullMethod: RandomNumbers_GenerateRequest_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RandomNumbersServer).Generate(ctx, req.(*GenRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _RandomNumbers_GenerateCrypto_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CryptRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RandomNumbersServer).GenerateCrypto(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: RandomNumbers_GenerateCrypto_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RandomNumbersServer).GenerateCrypto(ctx, req.(*CryptRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _RandomNumbers_GenerateNumbers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GenNumRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RandomNumbersServer).GenerateNumbers(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: RandomNumbers_GenerateNumbers_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RandomNumbersServer).GenerateNumbers(ctx, req.(*GenNumRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _RandomNumbers_SendNumbers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SendNumRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RandomNumbersServer).SendNumbers(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: RandomNumbers_SendNumbers_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RandomNumbersServer).SendNumbers(ctx, req.(*SendNumRequest))
+		return srv.(RandomNumbersServer).GenerateRequest(ctx, req.(*GenRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -199,20 +100,8 @@ var RandomNumbers_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*RandomNumbersServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Generate",
-			Handler:    _RandomNumbers_Generate_Handler,
-		},
-		{
-			MethodName: "GenerateCrypto",
-			Handler:    _RandomNumbers_GenerateCrypto_Handler,
-		},
-		{
-			MethodName: "GenerateNumbers",
-			Handler:    _RandomNumbers_GenerateNumbers_Handler,
-		},
-		{
-			MethodName: "SendNumbers",
-			Handler:    _RandomNumbers_SendNumbers_Handler,
+			MethodName: "GenerateRequest",
+			Handler:    _RandomNumbers_GenerateRequest_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
